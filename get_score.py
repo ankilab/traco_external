@@ -48,3 +48,6 @@ def get_score(path_to_upload: str, path_to_gt:str):
             final_score += score
 
     return final_score
+
+if __name__ == "__main__":
+    print("Score: ", get_score("files/zeroes.csv", "files/threeHB.csv"))
