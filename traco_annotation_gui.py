@@ -498,8 +498,8 @@ class Main(QMainWindow):
 
 if __name__ == '__main__':
     if not os.path.exists("settings.json"):
-        with open('settings.json','a') as fp:
-            json.dumps(fp, dict(default_directory=os.getcwd()))
+        with open('settings.json','w') as fp:
+            json.dump(dict(default_directory=os.getcwd()), fp)
         
     import sys
     app = QApplication(sys.argv)
