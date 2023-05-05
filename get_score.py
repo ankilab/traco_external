@@ -4,9 +4,9 @@ import pandas as pd
 from scipy.spatial.distance import cdist, euclidean
 from scipy.optimize import linear_sum_assignment
 
-PENALTY_MORE_THAN_FIVE_HEXBUGS = 500_000
+PENALTY_MORE_THAN_FOUR_HEXBUGS = 500_000
 PENALTY_ZERO_HEXBUGS = 500_000
-PENALTY_N_WRONG_HEXBUGS = 100_000 # only applies if the amount of predicted hexbugs is between 1 and 5
+PENALTY_N_WRONG_HEXBUGS = 100_000 # only applies if the amount of predicted hexbugs is between 1 and 4
 
 def get_score(path_to_upload: str, path_to_gt:str):
     final_score = 0
@@ -23,8 +23,8 @@ def get_score(path_to_upload: str, path_to_gt:str):
     # Apply penalties if the amount of predicted hexbugs is wrong
     if n_hexbugs_pred < 1:
         final_score += PENALTY_ZERO_HEXBUGS
-    elif n_hexbugs_pred > 5:
-        final_score += PENALTY_MORE_THAN_FIVE_HEXBUGS
+    elif n_hexbugs_pred > 4:
+        final_score += PENALTY_MORE_THAN_FOUR_HEXBUGS
     else:
         final_score += (np.abs(n_hexbugs_pred - n_hexbugs_gt) * PENALTY_N_WRONG_HEXBUGS)  
     
