@@ -1,7 +1,9 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, \
+import PyQt6
+from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, \
     QGridLayout, QWidget, QMessageBox, QLabel, QCheckBox, \
         QSizePolicy, QComboBox
-from PyQt5.QtCore import pyqtSignal, Qt
+from PyQt6.QtCore import pyqtSignal, Qt
+from PyQt6.QtCore import pyqtRemoveInputHook
 import pandas as pd
 import pyqtgraph as pg
 import imageio as io
@@ -10,7 +12,6 @@ import json
 import os
 import matplotlib.pyplot as plt
 
-from PyQt5.QtCore import pyqtRemoveInputHook
 from pdb import set_trace
 
 
@@ -75,11 +76,13 @@ class ImageView(pg.ImageView):
 
     def mousePressEvent(self, e):
         # Important, map xy coordinates to scene!
-        xy = self.getImageItem().mapFromScene(e.pos())
+        pos = e.pos()
+        xy = self.getImageItem().mapFromScene(pos.x(), pos.y())
         modifiers = QApplication.keyboardModifiers()
 
         # Set posterior point
-        if e.button() == Qt.LeftButton and modifiers == Qt.ControlModifier:
+        if e.button() == Qt.MouseButton.LeftButton:
+        #if e.button() == Qt.MouseButton.LeftButton and modifiers == Qt.KeyboardModifier.ControlModifier:
             self.realRois[self.stack.annotating].setPos(xy)
             self.realRois[self.stack.annotating].show() 
 
@@ -144,7 +147,7 @@ class Stack(QWidget):
         ### Create Grid Layout and add the main image window to layout ###
         self.l = QGridLayout()
         self.l.addWidget(self.w, 0, 0, 12, 1)
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.w.setSizePolicy(sizePolicy)
         self.w.show()
 
@@ -194,7 +197,7 @@ class Stack(QWidget):
 
         ### Add another empty label to ensure nice GUI formatting ###
         self.ll = QLabel()
-        self.ll.setSizePolicy(QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding))
+        self.ll.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding))
         self.l.addWidget(self.ll, 11, 1)
 
     
@@ -292,25 +295,25 @@ class Stack(QWidget):
 
     def keyPress(self, key):
         # AD for -1 +1
-        if key == Qt.Key_D:
+        if key == Qt.Key.Key_D:
              self.forceStep(1)
 
-        elif key == Qt.Key_A:
+        elif key == Qt.Key.Key_A:
             self.forceStep(-1)
 
-        elif key == Qt.Key_1:
+        elif key == Qt.Key.Key_1:
             self.p1.setChecked(not self.p1.isChecked())
 
-        elif key == Qt.Key_2:
+        elif key == Qt.Key.Key_2:
             self.p2.setChecked(not self.p2.isChecked())
 
-        elif key == Qt.Key_3:
+        elif key == Qt.Key.Key_3:
             self.p3.setChecked(not self.p3.isChecked())
 
-        elif key == Qt.Key_4:
+        elif key == Qt.Key.Key_4:
             self.p4.setChecked(not self.p4.isChecked())
 
-        elif key == Qt.Key_Q:
+        elif key == Qt.Key.Key_Q:
             self.p1.setChecked(True)
             self.p2.setChecked(True)
             self.p3.setChecked(True)
@@ -318,7 +321,7 @@ class Stack(QWidget):
 
     def keyPressEvent(self, e):
         # Emit Save command to parent class
-        if e.key() == Qt.Key_S:
+        if e.key() == Qt.Key.Key_S:
             self.w.keysignal.emit(e.key())
 
 ######################
@@ -491,7 +494,7 @@ class Main(QMainWindow):
         """
         modifiers = QApplication.keyboardModifiers()
 
-        if key == Qt.Key_S and modifiers == Qt.ControlModifier:
+        if key == Qt.Key.Key_S and modifiers == Qt.KeyboardModifier.ControlModifier:
             self.save()
 
 
@@ -507,4 +510,4 @@ if __name__ == '__main__':
     m = Main()
     m.show()
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
