@@ -181,7 +181,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("path_to_prediction", help="path to the prediction file")
     parser.add_argument("path_to_gt", help="path to the ground truth file")
+    parser.add_argument("--log", help="log the score", action="store_true")
     args = parser.parse_args()
 
     # calculate score
-    print(f"Score: {get_score(args.path_to_prediction, args.path_to_gt)}")
+    print(f"Score: {get_score(args.path_to_prediction, args.path_to_gt, args.log)}")
