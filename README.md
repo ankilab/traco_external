@@ -30,6 +30,8 @@ The score of the annotation is calculated by the `get_score.py` script. It can b
 
 ```python get_score.py --path_to_prediction <path_to_prediction_file> --path_to_gt <path_to_gt_file> --log```
 
+or by calling it within the Jupyter Notebook  ````score-calculation.ipynb```.
+
 Specifying the `--log` flag will save the scores for each frame and how the HexBug IDs were matched in a log file.
 
 We also added some unit tests for the score calculation in the `score_tests` folder.
